@@ -6,14 +6,18 @@ const chalk = require("chalk");
 const Socket = require("socket.io");
 const bodyParser = require("body-parser");
 const { greenBright, blackBright, black } = require("chalk");
+const routes = require("./routes");
 
 const PORT = process.env.PORT || 8080;
 const ISDEV = process.env.NODE_ENV !== "production";
 
+//all the middlewares
+require("./database");
 const app = express();
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(bodyParser());
+app.use("/api/v1", routes);
 
 const server = app.listen(PORT, () => {
   console.clear();
