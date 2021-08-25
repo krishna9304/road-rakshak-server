@@ -19,6 +19,13 @@ app.use(morgan("tiny"));
 app.use(bodyParser());
 app.use("/api/v1", routes);
 
+app.get("/", (req, res, next) => {
+  res.send({
+    res: true,
+    msg: "Server running",
+  });
+});
+
 const server = app.listen(PORT, () => {
   console.clear();
   console.log(
@@ -26,7 +33,7 @@ const server = app.listen(PORT, () => {
       black(
         ` Server started on PORT ${PORT} at ${Date()} as ${
           ISDEV ? "DEV" : "PRODUCTION"
-        } \n`
+        }\n`
       )
     )
   );
@@ -64,5 +71,5 @@ io.sockets.on("connection", (soc) => {
 });
 
 const addEvents = (client) => {
-  client.on("hlw", console.log);
+  client.on("log", console.log);
 };
