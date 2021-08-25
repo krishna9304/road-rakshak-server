@@ -9,6 +9,10 @@ const Report = mongoose.Schema({
     type: mongoose.Schema.Types._ObjectId,
     required: true,
   },
+  hurdleType: {
+    type: String,
+    required: true,
+  },
   state: {
     type: String,
     required: true,

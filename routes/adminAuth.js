@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const User = require("../database/models/user");
+const Admin = require("../database/models/admin");
 const validator = require("validator");
 const { hash } = require("../utilities/password");
 const { compare } = require("../utilities/password");
@@ -18,10 +18,13 @@ router.post("/signUp", (req, res, next) => {
   if ((data.password + "").length < 8 || !data.password) {
     errors.push("Invalid Password!");
   }
-  User.exists({ email: data.email }, (err, result) => {
+  if ((data.phone + "").length !== 10 || !data.phone) {
+    errors.push("Invalid phone number!");
+  }
+  Admin.exists({ email: data.email, phone: data.phone }, (err, result) => {
     if (err) next(err);
     if (result) {
-      errors.push("Email already exists!!");
+      errors.push("Email or phone number already exists!!");
     }
     if (errors.length !== 0) {
       res.send({
@@ -31,8 +34,8 @@ router.post("/signUp", (req, res, next) => {
     } else {
       hash(data.password, next, (encPass) => {
         data.password = encPass;
-        const user = new User(data);
-        user
+        const admin = new Admin(data);
+        admin
           .save()
           .then((doc) => {
             let token = tokenGenerator(doc._id, doc.name);
@@ -40,7 +43,7 @@ router.post("/signUp", (req, res, next) => {
               res: true,
               userData: doc,
               jwt: token,
-              msg: "User registered succesfully!!",
+              msg: "Admin registered succesfully!!",
             });
           })
           .catch(next);
@@ -58,10 +61,10 @@ router.post("/signIn", (req, res, next) => {
   if ((data.password + "").length < 8 || !data.password) {
     errors.push("Invalid Password!");
   }
-  User.exists({ email: data.email }, (err, result) => {
+  Admin.exists({ email: data.email }, (err, result) => {
     if (err) next(err);
     if (result) {
-      User.findOne({ email: data.email })
+      Admin.findOne({ email: data.email })
         .then((doc) => {
           compare(doc.password, data.password, next, (same) => {
             if (same) {
@@ -95,10 +98,10 @@ router.post("/verifyToken", (req, res, next) => {
   tokenDecoder(token, (err, decoded) => {
     if (err) next(err);
     if (decoded) {
-      User.exists({ _id: decoded._id, name: decoded.name }, (err, result) => {
+      Admin.exists({ _id: decoded._id, name: decoded.name }, (err, result) => {
         if (err) next(err);
         if (result) {
-          User.findById(decoded._id, (err, doc) => {
+          Admin.findById(decoded._id, (err, doc) => {
             if (err) next(err);
             res.send({
               res: true,
@@ -109,7 +112,7 @@ router.post("/verifyToken", (req, res, next) => {
         } else {
           res.send({
             res: false,
-            msg: "User not found in the database",
+            msg: "Admin not found in the database",
           });
         }
       });
