@@ -6,8 +6,9 @@ const { compare } = require("../utilities/password");
 const { tokenGenerator } = require("../utilities/jwt");
 const { tokenDecoder } = require("../utilities/jwt");
 
-router.post("/signUp", (req, res, next) => {
+router.post("/signup", (req, res, next) => {
   let data = req.body;
+  // email, name, password
   let errors = [];
   if (!data.email || !validator.isEmail(data.email + "")) {
     errors.push("Invalid Email!");
@@ -75,17 +76,23 @@ router.post("/signIn", (req, res, next) => {
             } else {
               errors.push("Wrong password!!");
             }
+            if (errors.length) {
+              res.send({
+                res: false,
+                errors: errors,
+              });
+            }
           });
         })
         .catch(next);
     } else {
       errors.push("This email doesn't exist!!");
-    }
-    if (errors.length !== 0) {
-      res.send({
-        res: false,
-        errors: errors,
-      });
+      if (errors.length) {
+        res.send({
+          res: false,
+          errors: errors,
+        });
+      }
     }
   });
 });
