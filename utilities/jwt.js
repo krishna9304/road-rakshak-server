@@ -16,11 +16,16 @@ const tokenGenerator = (_id, name) => {
 
 const tokenDecoder = (token, cb) => {
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    const finalDecoded = {
-      _id: decoded._id,
-      name: decoded.name,
-    };
-    cb(err, finalDecoded);
+    let finalDecoded;
+    try {
+      finalDecoded = {
+        _id: decoded._id,
+        name: decoded.name,
+      };
+      cb(err, finalDecoded);
+    } catch (error) {
+      cb(err, finalDecoded);
+    }
   });
 };
 module.exports.tokenGenerator = tokenGenerator;

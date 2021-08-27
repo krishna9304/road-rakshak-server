@@ -5,7 +5,7 @@ const cors = require("cors");
 const chalk = require("chalk");
 const Socket = require("socket.io");
 const bodyParser = require("body-parser");
-const { greenBright, blackBright, black } = require("chalk");
+const { greenBright, blackBright, black, redBright } = require("chalk");
 const routes = require("./routes");
 
 const PORT = process.env.PORT || 8080;
@@ -16,8 +16,15 @@ require("./database");
 const app = express();
 app.use(cors());
 app.use(morgan("tiny"));
-app.use(bodyParser());
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 app.use("/api/v1", routes);
+
+// error handler
 
 app.get("/", (req, res, next) => {
   res.send({
@@ -73,3 +80,13 @@ io.sockets.on("connection", (soc) => {
 const addEvents = (client) => {
   client.on("log", console.log);
 };
+
+app.use(function (err, req, res, next) {
+  console.log(redBright(err.stack));
+  res
+    .send({
+      msg: ISDEV ? err.message : "Contact Developer",
+      stack: ISDEV ? err.stack : "Error stack not visible on production",
+    })
+    .status(500);
+});

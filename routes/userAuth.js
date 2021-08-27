@@ -116,7 +116,7 @@ router.post("/verifyToken", (req, res, next) => {
         } else {
           res.send({
             res: false,
-            msg: "User not found in the database",
+            msg: "User not found",
           });
         }
       });
