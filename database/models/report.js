@@ -6,7 +6,7 @@ const Report = mongoose.Schema({
     required: true,
   },
   reportedBy: {
-    type: mongoose.Schema.Types._ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
   hurdleType: {
@@ -28,12 +28,11 @@ const Report = mongoose.Schema({
     type: String,
     required: true,
   },
-  siteImages: [
-    {
-      type: String,
-      required: true,
-    },
-  ],
+  siteImage: {
+    type: String,
+    required: true,
+  },
+
   isVerified: {
     type: Boolean,
     default: false,
