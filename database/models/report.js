@@ -37,6 +37,10 @@ const Report = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  timestamp: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("report", Report);

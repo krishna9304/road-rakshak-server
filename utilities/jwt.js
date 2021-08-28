@@ -8,7 +8,7 @@ const tokenGenerator = (_id, name) => {
     },
     process.env.JWT_SECRET,
     {
-      expiresIn: "1h",
+      expiresIn: "100h",
     }
   );
   return token;

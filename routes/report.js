@@ -5,8 +5,7 @@ const upload = require("../utilities/fileSaver");
 const Report = require("../database/models/report");
 const Admin = require("../database/models/admin");
 
-router.post("/createReport", upload.single("picture"), (req, res, next) => {
-  console.log(uuid());
+router.post("/createReport", upload.single("siteImage"), (req, res, next) => {
   let data = req.body;
   let errors = [];
   if (!data.siteImage) {
@@ -51,7 +50,7 @@ router.post("/createReport", upload.single("picture"), (req, res, next) => {
             req.file.filename;
           data.siteImage = url;
         }
-        let report = new Report(data);
+        let report = new Report({ ...data, reportId });
         report
           .save()
           .then((doc) => {
