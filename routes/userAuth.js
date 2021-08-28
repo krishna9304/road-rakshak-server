@@ -98,7 +98,7 @@ router.post("/signIn", (req, res, next) => {
 });
 
 router.post("/verifyToken", (req, res, next) => {
-  let token = req.body.token;
+  let { token } = req.body;
   tokenDecoder(token, (err, decoded) => {
     if (err) next(err);
     if (decoded) {
@@ -107,9 +107,11 @@ router.post("/verifyToken", (req, res, next) => {
         if (result) {
           User.findById(decoded._id, (err, doc) => {
             if (err) next(err);
+            const newToken = tokenGenerator(doc._id, doc.name);
             res.send({
               res: true,
               userData: doc,
+              token: newToken,
               msg: "Token verified!",
             });
           });

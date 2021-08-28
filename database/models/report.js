@@ -13,18 +13,6 @@ const Report = mongoose.Schema({
     type: String,
     required: true,
   },
-  state: {
-    type: String,
-    required: true,
-  },
-  city: {
-    type: String,
-    required: true,
-  },
-  pincode: {
-    type: String,
-    required: true,
-  },
   address: {
     type: String,
     required: true,
@@ -40,10 +28,12 @@ const Report = mongoose.Schema({
     type: String,
     required: true,
   },
-  siteImage: {
-    type: String,
-    required: true,
-  },
+  siteImages: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
   isVerified: {
     type: Boolean,
     default: false,
