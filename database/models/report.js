@@ -38,6 +38,10 @@ const Report = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  avoidable: {
+    type: Number,
+    default: 5,
+  },
 });
 
 module.exports = mongoose.model("report", Report);
