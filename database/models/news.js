@@ -13,6 +13,10 @@ const News = mongoose.Schema({
     type: String,
     required: true,
   },
+  timestamp: {
+    type: String,
+    required: true,
+  },
   references: [
     {
       type: String,
