@@ -4,6 +4,10 @@ const User = require("../database/models/user");
 const upload = require("../utilities/fileSaver");
 const Report = require("../database/models/report");
 const Admin = require("../database/models/admin");
+const {
+  isValidLatitude,
+  isValidLongitude,
+} = require("is-valid-geo-coordinates");
 
 router.post("/createReport", upload.single("siteImage"), (req, res, next) => {
   let data = req.body;
@@ -65,8 +69,8 @@ router.post("/createReport", upload.single("siteImage"), (req, res, next) => {
   }
 });
 
-router.get("getReports", (req, res, next) => {
-  let data = req.data;
+router.post("/getReports", (req, res, next) => {
+  let data = req.body;
   Admin.findById(data.requestedBy).then((doc) => {
     if (!doc) {
       res.send({
@@ -89,6 +93,62 @@ router.get("getReports", (req, res, next) => {
         .catch(next);
     }
   });
+});
+
+router.post("/getreport", (req, res, next) => {
+  const { id } = req.body;
+  Report.findOne({ reportId: id })
+    .then((doc) => {
+      if (!doc) {
+        res.send({
+          res: false,
+          errors: ["Report not found!"],
+        });
+      } else {
+        res.send({
+          res: true,
+          report: doc,
+        });
+      }
+    })
+    .catch(next);
+});
+
+router.post("/updateReport", (req, res, next) => {
+  let data = req.body;
+  let errors = [];
+  if (!data.coord.latitude) {
+    errors.push("Enter correct latitude coordinate.");
+  }
+  if (!data.coord.longitude) {
+    errors.push("Enter correct longitude coordinate.");
+  }
+  if (errors.length) {
+    res.send({
+      res: false,
+      errors,
+    });
+  } else {
+    Report.findOne({ reportId: data.reportId })
+      .then((doc) => {
+        doc.locationCoords = data.coord;
+        if (!doc.isVerified) {
+          if (data.checked) {
+            doc.isVerified = true;
+          }
+        }
+        doc
+          .save()
+          .then((doc) => {
+            res.send({
+              res: true,
+              msg: "Report updated succesfully!",
+            });
+          })
+          .catch(next);
+      })
+      .catch(next);
+  }
 });
 
 module.exports = router;

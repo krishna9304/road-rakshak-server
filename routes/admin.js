@@ -1,4 +1,4 @@
-const user = require("../database/models/user");
+const admin = require("../database/models/admin");
 const { compare, hash } = require("../utilities/password");
 const validator = require("validator");
 const { tokenGenerator, tokenDecoder } = require("../utilities/jwt");
@@ -27,7 +27,7 @@ router.post("/changeprofile", (req, res, next) => {
       errors,
     });
   } else {
-    user
+    admin
       .findOne({ email: data.email })
       .then((doc) => {
         if (!doc) {
@@ -46,21 +46,29 @@ router.post("/changeprofile", (req, res, next) => {
               });
             } else {
               if (data.newPass) {
-                hash(data.newPass, next, (hashed) => {
-                  doc.password = hashed;
-                  doc.name = data.name;
-                  doc
-                    .save()
-                    .then((userData) => {
-                      const token = tokenGenerator(doc._id, userData.name);
-                      res.send({
-                        res: true,
-                        userData,
-                        token,
-                      });
-                    })
-                    .catch(next);
-                });
+                if ((data.newPass + "").length < 8) {
+                  errors.push("Use atleast 8 characters to create a password!");
+                  res.send({
+                    res: false,
+                    errors,
+                  });
+                } else {
+                  hash(data.newPass, next, (hashed) => {
+                    doc.password = hashed;
+                    doc.name = data.name;
+                    doc
+                      .save()
+                      .then((userData) => {
+                        const token = tokenGenerator(doc._id, userData.name);
+                        res.send({
+                          res: true,
+                          userData,
+                          token,
+                        });
+                      })
+                      .catch(next);
+                  });
+                }
               } else {
                 doc.name = data.name;
                 doc
@@ -97,11 +105,11 @@ router.post("/verifyuser", (req, res, next) => {
       errors,
     });
   } else {
-    user
+    admin
       .findOne({ email })
       .then((doc) => {
         if (doc.isVerified) {
-          errors.push("User already verified");
+          errors.push("Admin already verified");
         } else {
           const token = tokenGenerator(doc._id, doc.name);
           mail({
@@ -129,11 +137,11 @@ router.post("/verified", (req, res, next) => {
   let errors = [];
   tokenDecoder(data.token, (err, { _id }) => {
     if (err) next(err);
-    user
+    admin
       .findById(_id)
       .then((doc) => {
         if (doc.isVerified) {
-          errors.push("User already verified");
+          errors.push("Admin already verified");
         } else {
           doc.isVerified = true;
           doc
@@ -151,20 +159,6 @@ router.post("/verified", (req, res, next) => {
   });
 });
 
-router.post("/getuser", (req, res, next) => {
-  const { id } = req.body;
-  user.findById(id).then((userData) => {
-    if (!userData) {
-      res.send({ res: false, errors: ["User not found"] });
-    } else {
-      res.send({
-        res: true,
-        userData,
-      });
-    }
-  });
-});
-
 router.post("/details", (req, res, next) => {
   const data = req.body;
   let errors = [];
@@ -179,7 +173,7 @@ router.post("/details", (req, res, next) => {
   } else {
     tokenDecoder(data.token, (err, { _id }) => {
       if (err) next(err);
-      user
+      admin
         .findById(_id)
         .then((doc) => {
           res.send({ res: true, userData: doc });

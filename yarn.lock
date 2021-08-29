@@ -925,6 +925,11 @@
   "resolved" "https://registry.npmjs.org/is-npm/-/is-npm-4.0.0.tgz"
   "version" "4.0.0"
 
+"is-number-between@^1.0.9":
+  "integrity" "sha512-AaWGgWC99d/OSAq+dVXS62gM/4558OS8EX7ZKQgRsNWvx89CTz32wDVM87TF+KPmc3fZlZsvcm9HHkcUvZP8Wg=="
+  "resolved" "https://registry.npmjs.org/is-number-between/-/is-number-between-1.0.11.tgz"
+  "version" "1.0.11"
+
 "is-number@^7.0.0":
   "integrity" "sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng=="
   "resolved" "https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz"
@@ -944,6 +949,13 @@
   "integrity" "sha1-5HnICFjfDBsR3dppQPlgEfzaSpo="
   "resolved" "https://registry.npmjs.org/is-typedarray/-/is-typedarray-1.0.0.tgz"
   "version" "1.0.0"
+
+"is-valid-geo-coordinates@^1.1.0":
+  "integrity" "sha512-pkDlhxdbdbEkhWsCIICKMjTpoKdV5MkJk2dITSrfYIW/dUyYxKW3EDvzToJkF4fRpEVADKGtFsRMxkhHC+YCfg=="
+  "resolved" "https://registry.npmjs.org/is-valid-geo-coordinates/-/is-valid-geo-coordinates-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "is-number-between" "^1.0.9"
 
 "is-yarn-global@^0.3.0":
   "integrity" "sha512-VjSeb/lHmkoyd8ryPVIKvOCn4D1koMqY+vqyjjUfc3xyKtP4dYOxM44sZrnqQSzSds3xyOrUTLTC9LVCVgLngw=="
