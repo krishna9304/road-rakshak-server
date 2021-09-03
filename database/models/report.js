@@ -32,14 +32,13 @@ const Report = mongoose.Schema({
     type: String,
     required: true,
   },
-
   isVerified: {
     type: Boolean,
     default: false,
   },
-  avoidable: {
-    type: Number,
-    default: 5,
+  timestamp: {
+    type: String,
+    required: true,
   },
 });
 

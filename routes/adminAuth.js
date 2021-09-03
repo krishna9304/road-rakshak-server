@@ -18,10 +18,10 @@ router.post("/signUp", (req, res, next) => {
   if ((data.password + "").length < 8 || !data.password) {
     errors.push("Invalid Password!");
   }
-  if ((data.phone + "").length !== 10 || !data.phone) {
+  if ((data.phoneNo + "").length !== 10 || !data.phoneNo) {
     errors.push("Invalid phone number!");
   }
-  Admin.exists({ email: data.email, phone: data.phone }, (err, result) => {
+  Admin.exists({ email: data.email, phoneNo: data.phoneNo }, (err, result) => {
     if (err) next(err);
     if (result) {
       errors.push("Email or phone number already exists!!");
@@ -42,7 +42,7 @@ router.post("/signUp", (req, res, next) => {
             res.send({
               res: true,
               userData: doc,
-              jwt: token,
+              jwtAdmin: token,
               msg: "Admin registered succesfully!!",
             });
           })
@@ -73,7 +73,7 @@ router.post("/signIn", (req, res, next) => {
                 res: true,
                 userData: doc,
                 msg: "Login successful",
-                jwt: token,
+                jwtAdmin: token,
               });
             } else {
               errors.push("Wrong password!!");
