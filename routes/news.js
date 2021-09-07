@@ -7,6 +7,11 @@ router.post("/createNews", upload.single("picture"), (req, res, next) => {
   let isDev = process.env.NODE_ENV !== "production";
   let data = req.body;
   let errors = [];
+  data.references = data.references.split(",");
+  data.references = data.references.map((ref) => {
+    return ref.trim();
+  });
+  console.log(data);
   Admin.findById(data.postedBy).then((doc) => {
     if (!doc) {
       errors.push("User not found!!");

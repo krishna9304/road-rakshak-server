@@ -151,4 +151,15 @@ router.post("/updateReport", (req, res, next) => {
   }
 });
 
+router.post("/getVerified", (req, res, next) => {
+  Report.find({ isVerified: true })
+    .then((docs) => {
+      res.send({
+        res: true,
+        reports: docs,
+      });
+    })
+    .catch(next);
+});
+
 module.exports = router;
