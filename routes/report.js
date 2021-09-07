@@ -4,10 +4,7 @@ const User = require("../database/models/user");
 const upload = require("../utilities/fileSaver");
 const Report = require("../database/models/report");
 const Admin = require("../database/models/admin");
-const {
-  isValidLatitude,
-  isValidLongitude,
-} = require("is-valid-geo-coordinates");
+const { distanceBtw } = require("../utilities/maputilities");
 
 router.post("/createReport", upload.single("siteImage"), (req, res, next) => {
   let data = req.body;
@@ -153,10 +150,38 @@ router.post("/updateReport", (req, res, next) => {
 
 router.post("/getVerified", (req, res, next) => {
   Report.find({ isVerified: true })
-    .then((docs) => {
+    .then((hurdles) => {
       res.send({
         res: true,
-        reports: docs,
+        hurdles,
+      });
+    })
+    .catch(next);
+});
+
+router.post("/getonpath", (req, res, next) => {
+  const { coords } = req.body;
+  const hurdles = [];
+  const threshold = 100;
+  Report.find({ isVerified: true })
+    .then((docs) => {
+      for (let hurdle of docs) {
+        const c1 = [
+          hurdle.locationCoords.longitude,
+          hurdle.locationCoords.latitude,
+        ];
+        for (let coord of coords) {
+          const d = distanceBtw(c1, coord);
+          if (d < 5000) {
+            console.log(d, hurdle.hurdleType);
+            hurdles.push(hurdle);
+            break;
+          }
+        }
+      }
+      res.send({
+        res: true,
+        hurdles,
       });
     })
     .catch(next);
