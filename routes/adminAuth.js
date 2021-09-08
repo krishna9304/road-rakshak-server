@@ -77,6 +77,10 @@ router.post("/signIn", (req, res, next) => {
               });
             } else {
               errors.push("Wrong password!!");
+              res.send({
+                res: false,
+                errors: errors,
+              });
             }
           });
         })

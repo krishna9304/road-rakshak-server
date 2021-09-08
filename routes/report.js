@@ -162,7 +162,7 @@ router.post("/getVerified", (req, res, next) => {
 router.post("/getonpath", (req, res, next) => {
   const { coords } = req.body;
   const hurdles = [];
-  const threshold = 100;
+  const threshold = 200;
   Report.find({ isVerified: true })
     .then((docs) => {
       for (let hurdle of docs) {
@@ -172,7 +172,7 @@ router.post("/getonpath", (req, res, next) => {
         ];
         for (let coord of coords) {
           const d = distanceBtw(c1, coord);
-          if (d < 5000) {
+          if (d < threshold) {
             console.log(d, hurdle.hurdleType);
             hurdles.push(hurdle);
             break;
