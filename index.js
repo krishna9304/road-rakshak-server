@@ -10,6 +10,7 @@ const routes = require("./routes");
 
 const PORT = process.env.PORT || 8080;
 const ISDEV = process.env.NODE_ENV !== "production";
+module.exports.ISDEV = ISDEV;
 
 //all the middlewares
 require("./database");
