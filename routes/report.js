@@ -160,7 +160,7 @@ router.post("/getVerified", (req, res, next) => {
 });
 
 router.post("/getonpath", (req, res, next) => {
-  const { coords } = req.body;
+  const { coords, origin } = req.body;
   const hurdles = [];
   const threshold = 200;
   Report.find({ isVerified: true })
@@ -173,7 +173,6 @@ router.post("/getonpath", (req, res, next) => {
         for (let coord of coords) {
           const d = distanceBtw(c1, coord);
           if (d < threshold) {
-            console.log(d, hurdle.hurdleType);
             hurdles.push(hurdle);
             break;
           }
@@ -181,10 +180,35 @@ router.post("/getonpath", (req, res, next) => {
       }
       res.send({
         res: true,
-        hurdles,
+        hurdles: !origin ? hurdles : arrange(hurdles, origin),
       });
     })
     .catch(next);
 });
+
+const arrange = (hurdles, origin) => {
+  let finalHurdles = [];
+  for (let _hurdle of hurdles) {
+    let leastDist = {
+      hurdle: null,
+      distance: Infinity,
+    };
+    for (let hurdle of hurdles) {
+      if (!finalHurdles.includes(hurdle)) {
+        const c1 = [
+          hurdle.locationCoords.longitude,
+          hurdle.locationCoords.latitude,
+        ];
+        const d = distanceBtw(c1, origin);
+        if (leastDist.distance > d) {
+          leastDist.hurdle = hurdle;
+          leastDist.distance = d;
+        }
+      }
+    }
+    finalHurdles.push(leastDist.hurdle);
+  }
+  return finalHurdles;
+};
 
 module.exports = router;
