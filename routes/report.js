@@ -46,7 +46,7 @@ router.post("/createReport", upload.single("siteImage"), (req, res, next) => {
           const url =
             req.protocol +
             "://" +
-            (isDev ? "localhost:8080" : "") +
+            (isDev ? "localhost:8080" : "road-rakshak-server.herokuapp.com") +
             "/" +
             req.file.filename;
           data.siteImage = url;
