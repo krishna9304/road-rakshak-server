@@ -11,6 +11,49 @@ const distanceBtw = (coords1, coords2) => {
   const d = R * c; // in metres
   return d;
 };
+
+const arrange = (hurdles, origin) => {
+  let finalHurdles = [];
+  for (let _hurdle of hurdles) {
+    let leastDist = {
+      hurdle: null,
+      distance: Infinity,
+    };
+    for (let hurdle of hurdles) {
+      if (!finalHurdles.includes(hurdle)) {
+        const c1 = [
+          hurdle.locationCoords.longitude,
+          hurdle.locationCoords.latitude,
+        ];
+        const d = distanceBtw(c1, origin);
+        if (leastDist.distance > d) {
+          leastDist.hurdle = hurdle;
+          leastDist.distance = d;
+        }
+      }
+    }
+    finalHurdles.push(leastDist.hurdle);
+  }
+  return finalHurdles;
+};
+
+const getNearestHurdle = (coords, hurdles) => {
+  let nearestHurdle = { distance: Infinity };
+  for (let hurdle of hurdles) {
+    const c1 = [
+      hurdle.locationCoords.longitude,
+      hurdle.locationCoords.latitude,
+    ];
+    const d = distanceBtw(c1, coords);
+    if (nearestHurdle.distance > d && d < 200) {
+      nearestHurdle = { distance: d, hurdle: hurdle };
+    }
+  }
+  return nearestHurdle;
+};
+
 module.exports = {
   distanceBtw,
+  arrange,
+  getNearestHurdle,
 };

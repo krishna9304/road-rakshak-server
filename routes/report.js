@@ -4,7 +4,7 @@ const User = require("../database/models/user");
 const upload = require("../utilities/fileSaver");
 const Report = require("../database/models/report");
 const Admin = require("../database/models/admin");
-const { distanceBtw } = require("../utilities/maputilities");
+const { distanceBtw, arrange } = require("../utilities/maputilities");
 
 router.post("/createReport", upload.single("siteImage"), (req, res, next) => {
   let data = req.body;
@@ -185,30 +185,5 @@ router.post("/getonpath", (req, res, next) => {
     })
     .catch(next);
 });
-
-const arrange = (hurdles, origin) => {
-  let finalHurdles = [];
-  for (let _hurdle of hurdles) {
-    let leastDist = {
-      hurdle: null,
-      distance: Infinity,
-    };
-    for (let hurdle of hurdles) {
-      if (!finalHurdles.includes(hurdle)) {
-        const c1 = [
-          hurdle.locationCoords.longitude,
-          hurdle.locationCoords.latitude,
-        ];
-        const d = distanceBtw(c1, origin);
-        if (leastDist.distance > d) {
-          leastDist.hurdle = hurdle;
-          leastDist.distance = d;
-        }
-      }
-    }
-    finalHurdles.push(leastDist.hurdle);
-  }
-  return finalHurdles;
-};
 
 module.exports = router;

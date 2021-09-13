@@ -5,8 +5,10 @@ const cors = require("cors");
 const chalk = require("chalk");
 const Socket = require("socket.io");
 const bodyParser = require("body-parser");
-const { greenBright, blackBright, black, redBright } = require("chalk");
+const { greenBright, black, redBright } = require("chalk");
 const routes = require("./routes");
+const { getNearestHurdle } = require("./utilities/maputilities");
+const report = require("./database/models/report");
 
 const PORT = process.env.PORT || 8080;
 const ISDEV = process.env.NODE_ENV !== "production";
@@ -80,7 +82,28 @@ io.sockets.on("connection", (soc) => {
 });
 
 const addEvents = (client) => {
-  client.on("log", console.log);
+  client.on("GET_HURDLE", ({ coords, id, lastDist }) => {
+    report
+      .find({})
+      .then((docs) => {
+        console.log(id, lastDist);
+        const hurdle = getNearestHurdle(coords, docs);
+        if (
+          hurdle.distance > lastDist &&
+          hurdle.hurdle &&
+          String(hurdle.hurdle._id) === String(id) &&
+          id
+        ) {
+          client.emit("LE_HURDLE", {
+            hurdle: { _id: id },
+            distance: lastDist,
+          });
+        } else {
+          client.emit("LE_HURDLE", hurdle);
+        }
+      })
+      .catch(console.error);
+  });
 };
 
 app.use(function (err, req, res, next) {
