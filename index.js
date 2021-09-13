@@ -86,7 +86,6 @@ const addEvents = (client) => {
     report
       .find({})
       .then((docs) => {
-        console.log(id, lastDist);
         const hurdle = getNearestHurdle(coords, docs);
         if (
           hurdle.distance > lastDist &&

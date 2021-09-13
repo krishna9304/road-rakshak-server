@@ -11,7 +11,7 @@ router.post("/createNews", upload.single("picture"), (req, res, next) => {
   data.references = data.references.map((ref) => {
     return ref.trim();
   });
-  console.log(data);
+  // console.log(data);
   Admin.findById(data.postedBy).then((doc) => {
     if (!doc) {
       errors.push("User not found!!");
@@ -28,8 +28,7 @@ router.post("/createNews", upload.single("picture"), (req, res, next) => {
         const url =
           req.protocol +
           "://" +
-          (isDev ? "localhost:8080" : "") +
-          "/" +
+          (isDev ? "localhost:8080/" : "road-rakshak-admin.vercel.app/") +
           req.file.filename;
         data.picture = url;
       }
