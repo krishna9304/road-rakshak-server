@@ -28,7 +28,7 @@ router.post("/createNews", upload.single("picture"), (req, res, next) => {
         const url =
           req.protocol +
           "://" +
-          (isDev ? "localhost:8080/" : "road-rakshak-admin.vercel.app/") +
+          (isDev ? "localhost:8080/" : "road-rakshak-server.herokuapp.com/") +
           req.file.filename;
         data.picture = url;
       }
