@@ -185,5 +185,46 @@ router.post("/getonpath", (req, res, next) => {
     })
     .catch(next);
 });
+router.post("/delete", (req, res, next) => {
+  const data = req.body;
+  const errors = [];
+  Admin.findById(data.admin)
+    .then((doc) => {
+      if (!doc) {
+        errors.push(`Admin not found`);
+        res.send({
+          res: false,
+          errors,
+        });
+      } else if (!doc.isVerified) {
+        errors.push(`Admin not Verified`);
+        res.send({
+          res: false,
+          errors,
+        });
+      } else {
+        Report.exists({ _id: data.report }).then((reportExists) => {
+          if (reportExists) {
+            Report.findByIdAndDelete(data.report)
+              .then((reportDoc) => {
+                res.send({
+                  res: true,
+                  report: reportDoc,
+                  msg: "Report deleted successfully",
+                });
+              })
+              .catch(next);
+          } else {
+            errors.push(`Report not found`);
+            res.send({
+              res: false,
+              errors,
+            });
+          }
+        });
+      }
+    })
+    .catch(next);
+});
 
 module.exports = router;
