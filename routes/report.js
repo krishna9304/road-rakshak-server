@@ -51,7 +51,11 @@ router.post("/createReport", upload.single("siteImage"), (req, res, next) => {
             req.file.filename;
           data.siteImage = url;
         }
-        let report = new Report({ ...data, reportId });
+        let locationCoords = {
+          latitude: data.latitude,
+          longitude: data.longitude,
+        };
+        let report = new Report({ ...data, reportId, locationCoords });
         report
           .save()
           .then((doc) => {
