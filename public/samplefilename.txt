@@ -1,3 +1,0 @@
-This file was created because the public folder was made using github's website.
-It was compulsory to have atleast one file.
-;)
