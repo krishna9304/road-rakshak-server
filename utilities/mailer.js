@@ -31,7 +31,7 @@ async function mail({ to, verifierlink }) {
     },
   });
 
-  let info = await transporter.sendMail({
+  await transporter.sendMail({
     from: '"Road Rakshak" roadrakshakverifier@gmail.com',
     to: to,
     subject: "Account Verification",

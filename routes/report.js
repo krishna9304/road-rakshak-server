@@ -15,7 +15,7 @@ router.post("/createReport", upload.single("siteImage"), (req, res, next) => {
   if (!data.description) {
     errors.push("Description is required");
   }
-  if (!data.address || (data.address + "").length < 20) {
+  if (!data.address || !(data.address + "").length) {
     errors.push("Address is invalid");
   }
   if (!data.hurdleType) {

@@ -3,7 +3,7 @@ const { compare, hash } = require("../utilities/password");
 const validator = require("validator");
 const { tokenGenerator, tokenDecoder } = require("../utilities/jwt");
 const mail = require("../utilities/mailer");
-const { ISDEV } = require("../index");
+const ISDEV = require("..");
 
 const router = require("express").Router();
 

@@ -11,8 +11,8 @@ const { getNearestHurdle } = require("./utilities/maputilities");
 const report = require("./database/models/report");
 
 const PORT = process.env.PORT || 8080;
-const ISDEV = process.env.NODE_ENV !== "production";
-module.exports.ISDEV = ISDEV;
+const ISDEV = process.env.NODE_ENV === "development";
+module.exports = ISDEV;
 
 //all the middlewares
 require("./database");
