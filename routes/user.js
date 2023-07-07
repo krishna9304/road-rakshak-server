@@ -3,7 +3,7 @@ const { compare, hash } = require("../utilities/password");
 const validator = require("validator");
 const { tokenGenerator, tokenDecoder } = require("../utilities/jwt");
 const mail = require("../utilities/mailer");
-const ISDEV = require("..");
+const { CLIENT_URL } = require("../utilities/constants");
 
 const router = require("express").Router();
 
@@ -107,11 +107,7 @@ router.post("/verifyuser", (req, res, next) => {
           const token = tokenGenerator(doc._id, doc.name);
           mail({
             to: doc.email,
-            verifierlink: `${
-              ISDEV
-                ? "http://localhost:3000"
-                : "https://road-rakshak.vercel.app"
-            }/verifyuser/${token}`,
+            verifierlink: `${CLIENT_URL}/verifyuser/${token}`,
           });
           res.send({
             res: true,

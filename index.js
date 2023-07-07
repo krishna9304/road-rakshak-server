@@ -9,10 +9,7 @@ const { greenBright, black, redBright } = require("chalk");
 const routes = require("./routes");
 const { getNearestHurdle } = require("./utilities/maputilities");
 const report = require("./database/models/report");
-
-const PORT = process.env.PORT || 8080;
-const ISDEV = process.env.NODE_ENV === "development";
-module.exports = ISDEV;
+const { PORT, ISDEV } = require("./utilities/constants");
 
 //all the middlewares
 require("./database");

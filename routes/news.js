@@ -2,6 +2,7 @@ const router = require("express").Router();
 const News = require("../database/models/news");
 const upload = require("../utilities/fileSaver");
 const Admin = require("../database/models/admin");
+const { SERVER_URL } = require("../utilities/constants");
 
 router.post("/createNews", upload.single("picture"), (req, res, next) => {
   let isDev = process.env.NODE_ENV !== "production";
@@ -25,11 +26,7 @@ router.post("/createNews", upload.single("picture"), (req, res, next) => {
       });
     } else {
       if (req.file) {
-        const url =
-          req.protocol +
-          "://" +
-          (isDev ? "localhost:8080/" : "road-rakshak-server.herokuapp.com/") +
-          req.file.filename;
+        const url = req.protocol + "://" + `${SERVER_URL}/` + req.file.filename;
         data.picture = url;
       }
       let news = new News(data);

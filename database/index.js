@@ -1,10 +1,8 @@
 const chalk = require("chalk");
 let mongoose = require("mongoose");
-const ISDEV = require("..");
+const { MONGO_URI } = require("../utilities/constants");
 
-const uri = ISDEV
-  ? "mongodb://localhost:27017/roadrakshak"
-  : `mongodb+srv://${process.env.USERNAME}:${process.env.PASS}@cluster0.pycm3na.mongodb.net/?retryWrites=true&w=majority`;
+const uri = MONGO_URI;
 console.log(chalk.bgRedBright(uri));
 
 mongoose.connect(uri, {

@@ -5,6 +5,7 @@ const upload = require("../utilities/fileSaver");
 const Report = require("../database/models/report");
 const Admin = require("../database/models/admin");
 const { distanceBtw, arrange } = require("../utilities/maputilities");
+const { SERVER_URL } = require("../utilities/constants");
 
 router.post("/createReport", upload.single("siteImage"), (req, res, next) => {
   let data = req.body;
@@ -41,14 +42,9 @@ router.post("/createReport", upload.single("siteImage"), (req, res, next) => {
       } else {
         let reportId = uuidv4() + "";
         reportId = reportId.slice(reportId.length - 11, reportId.length - 1);
-        let isDev = process.env.NODE_ENV !== "production";
         if (req.file) {
           const url =
-            req.protocol +
-            "://" +
-            (isDev ? "localhost:8080" : "road-rakshak-server.herokuapp.com") +
-            "/" +
-            req.file.filename;
+            req.protocol + "://" + SERVER_URL + "/" + req.file.filename;
           data.siteImage = url;
         }
         let locationCoords = {

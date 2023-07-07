@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("./constants");
 
 const tokenGenerator = (_id, name) => {
   let token = jwt.sign(
@@ -6,7 +7,7 @@ const tokenGenerator = (_id, name) => {
       _id,
       name,
     },
-    process.env.JWT_SECRET,
+    JWT_SECRET,
     {
       expiresIn: "100h",
     }
@@ -15,7 +16,7 @@ const tokenGenerator = (_id, name) => {
 };
 
 const tokenDecoder = (token, cb) => {
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
     let finalDecoded;
     try {
       finalDecoded = {

@@ -1,6 +1,7 @@
 "use strict";
 require("dotenv").config();
 const nodemailer = require("nodemailer");
+const { NODE_MAILER_EMAIL, NODE_MAILER_PASSWORD } = require("./constants");
 
 async function mail({ to, verifierlink }) {
   const body = `<div style="justify-content: center; align-items: center; flex-direction: column; text-align: center; background-color: #191920; color: #fff; padding: 20px;" >
@@ -26,8 +27,8 @@ async function mail({ to, verifierlink }) {
     port: 465,
     secure: true,
     auth: {
-      user: process.env.EMAIL,
-      pass: process.env.MAIL_PASS,
+      user: NODE_MAILER_EMAIL,
+      pass: NODE_MAILER_PASSWORD,
     },
   });
 
